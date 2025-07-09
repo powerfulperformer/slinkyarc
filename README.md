@@ -1,4 +1,4 @@
-# slinkyarc
+# BALL AND PADDLE GAME C++14
 ball and paddle game
 this game is made using raylib 5.5 using VS code this is a simple ping pong styled game
 support me for further development of this game 
