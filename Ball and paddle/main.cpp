@@ -2,8 +2,11 @@
 #include <raylib.h>
 #include "raygui.h"
 #include <fstream>
+#include <tinyfiledialogs.h>
 int main() {
-    InitWindow(800, 600, "PADDLE AND BALL");
+    const int screen_width = 800;
+    const int screen_height = 600;
+    InitWindow(screen_width, screen_height, "PADDLE AND BALL");
     // Save highscore
     float rect_x = 400;
     float rect_y = 400;
@@ -13,8 +16,10 @@ int main() {
     float ball_speed_y = 3;
    float paddle_speed = 6;
    int score = 0;
+   int i = 0;Color bgcolor[i] = {WHITE,YELLOW,RED,GREEN,BLUE,GRAY};
    int highscore;
-   std::ifstream loadFile("C:/Users/Slinky_Arc/Desktop/Raylib-CPP-Starter-Template-for-VSCODE-main/highscore.txt");
+   Rectangle frame = {100,100,100,100};
+   std::ifstream loadFile("C:/Users/Slinky_Arc/Desktop/ball and paddle/highscore.txt");
 if (loadFile.is_open()) {
     loadFile >> highscore;
     loadFile.close();
@@ -22,8 +27,9 @@ if (loadFile.is_open()) {
     SetTargetFPS(120);
     bool running = true;
     bool modification = false;
+    bool autobot = false;
     while (!WindowShouldClose()) {
-        if (GuiButton((Rectangle){690, 550, 100, 40}, "PAUSE")) {
+        if (GuiButton((Rectangle){690, 550, 100, 40},"PAUSE")) {
             running = !running;
         }
         if (GuiButton((Rectangle){690,500,100,40},"MODIFY")){
@@ -31,13 +37,23 @@ if (loadFile.is_open()) {
         }
         if (modification){
             running = false;
+            if (GuiButton((Rectangle){640,220,50,50},"AUTO")){
+                autobot = !autobot;
+            }
             GuiSlider((Rectangle){640,100,100,20},"speedX","ball",&ball_speed_x,-20.0f,20.0f);
             GuiSlider((Rectangle){640,130,100,20},"SpeedY","ball",&ball_speed_y,-20.0f,20.0f);
             GuiSlider((Rectangle){640,160,100,20},"PADDLE","paddle",&paddle_speed,0.0f,100.0f);
+
+            DrawText("Press Right Keys To ChangeColor",610,185,10,BLACK);
+            if (IsKeyPressed(KEY_RIGHT)){ i+=1;}
+            if (IsKeyPressed(KEY_LEFT)){i-=1;}
+        }
+        if (autobot){
+            rect_x = ball_x-30;
         }
 
         BeginDrawing();
-        ClearBackground(WHITE);
+        ClearBackground(bgcolor[i]);
 
         Rectangle ball = { ball_x, ball_y, 10, 10 };
         Rectangle paddle = { rect_x, rect_y, 100, 20 };
@@ -76,7 +92,7 @@ if (loadFile.is_open()) {
 
         EndDrawing();
     }
-        std::ofstream saveFile("C:/Users/Slinky_Arc/Desktop/Raylib-CPP-Starter-Template-for-VSCODE-main/highscore.txt");
+        std::ofstream saveFile("C:/Users/Slinky_Arc/Desktop/ball and paddle/highscore.txt");
 if (saveFile.is_open()) {
     saveFile << highscore;
     saveFile.close();
